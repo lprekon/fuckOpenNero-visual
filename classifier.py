@@ -24,10 +24,10 @@ class ObjectClassifier():
     reading in each image from your datasets.
     """
     def train(self):
-        matrix_prob = {}    # dict of dicts representing P(f|C)
-        matrix_count = {}   # dict of dicts representing # times feature seen per class
-        classes_seen = {}   # dict representing times each class encountered
-        #TODO initialize dictionaries
+        matrix_prob = {label : {feature : 0 for feature in features} for label in labels}    # dict of dicts representing P(f|C)
+        matrix_count = {label : {feature : 0 for feature in features} for label in labels}   # dict of dicts representing # times feature seen per class
+        classes_seen = {label : 0 for label in labels}   # dict representing times each class encountered
+        
         for image in images: # worry about loading later
             # TODO get image pixels/edge info
             for feature in features:
