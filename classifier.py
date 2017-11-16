@@ -10,8 +10,13 @@ classify methods for this assignment.
 """
 class ObjectClassifier():
     labels = ['Tree', 'Sydney', 'Steve', 'Cube']
-    features = []   # Will be names of predicate functions
+    learned_model={}
 
+    def testFeature(image_data):
+        return True
+
+
+    features = [testFeature]   # Will be names of predicate functions
     """
     Everytime a snapshot is taken, this method is called and
     the result is displayed on top of the four-image panel.
@@ -43,7 +48,9 @@ class ObjectClassifier():
             for classification in (f for f in self.labels if classes_seen[f] > 0):
                 for feature in matrix_count[classification].keys():
                     matrix_prob[classification][feature] = matrix_count[classification][feature] / classes_seen[classification]
+            self.learned_model = matrix_prob
 
+    
 
 """
 Loads an image from file and calculates the edge pixel orientations.
