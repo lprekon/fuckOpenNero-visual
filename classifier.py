@@ -26,21 +26,21 @@ class ObjectClassifier():
     reading in each image from your datasets.
     """
     def train(self):
-        matrix_prob = {label : {feature : 0 for feature in features} for label in labels}    # dict of dicts representing P(f|C)
-        matrix_count = {label : {feature : 0 for feature in features} for label in labels}   # dict of dicts representing # times feature seen per class
-        classes_seen = {label : 0 for label in labels}   # dict representing times each class encountered
-        for classification in labels:
+        matrix_prob = {label : {feature : 0 for feature in self.features} for label in self.labels}    # dict of dicts representing P(f|C)
+        matrix_count = {label : {feature : 0 for feature in self.features} for label in self.labels}   # dict of dicts representing # times feature seen per class
+        classes_seen = {label : 0 for label in self.labels}   # dict representing times each class encountered
+        for classification in self.labels:
             data_folder = "./snapshots/training_data/" + classification
             images = [f for f in listdir(data_folder) if isfile(join(data_folder, f))]
             for image in images: 
                 image_data = load_image(image)
-                for feature in features:
+                for feature in self.features:
                     # TODO check edge info against each feature
                     if feature(image_data):
                         matrix_count[classification][feature] += 1
                 classes_seen[classification] += 1
 
-            for classification in labels:
+            for classification in self.labels is classes_seen[classification]:
                 for feature in matrix_count[classification].keys():
                     matrix_prob[classification][feature] = matrix_count[classification][feature] / classes_seen[classification]
 
