@@ -15,6 +15,20 @@ class ObjectClassifier():
     def testFeature(image_data):
         return True
 
+    """
+    checks: pixels with brightness > 100 and orientation == 90
+    against: all
+    for: >20%
+    """
+    def feature_sad_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        response_count = len([0 for y in range(len(brightness[0])) for x in range(len(brightness[0][0])) if brightness[y][x] > 100 and orientation[y][x] == 90])
+        return response_count / (len(brightness[0] * len(brightness[0][0]))) >= .2
+
+
 
     features = [testFeature]   # Will be names of predicate functions
     """
