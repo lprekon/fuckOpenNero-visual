@@ -16,21 +16,50 @@ class ObjectClassifier():
         return True
 
     """
-    checks: pixels with brightness > 100 and orientation == 90
-    against: all
+    checks: pixels with brightness >= 100 and orientation == 90
+    against: pixels with brighness >= 100
     for: >20%
     """
     def feature_sad_panda(image_data):
         brightness = image_data[0]
         orientation = image_data[1]
+        rows, columns = brightness.shape
         # Python: If you can't do it in one line, don't do it at all.
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
-        response_count = len([0 for y in range(len(brightness[0])) for x in range(len(brightness[0][0])) if brightness[y][x] > 100 and orientation[y][x] == 90])
-        return response_count / (len(brightness[0] * len(brightness[0][0]))) >= .2
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 90:
+                        response_count += 1
+        print("Sad Panda:")
+        print("\tresponse: " + str(response_count))
+        print("\ttotal: " + str(edge_count))
+        print("\t%: " + str(100.0 * response_count / edge_count))
+        return 1.0 * response_count / edge_count >= .13
+
+
+    """
+    checks: pixels with brightness >=100
+    against: all
+    for: >10%
+    """
+    def feature_blue_squirrel(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        response = len([brightness[y][x] for y in range(rows) for x in range(columns) if brightness[y][x] >= 100])
+        print("Blue Squirell:")
+        print("\tresponse: " + str(response))
+        print("\ttotal: " + str(rows*columns))
+        print("\t%: " + str(100.0 * response / (rows * columns)))
+        return 1.0 * response / (rows * columns) > .04
 
 
 
-    features = [testFeature]   # Will be names of predicate functions
+    features = [feature_sad_panda, feature_blue_squirrel]   # Will be names of predicate functions
     """
     Everytime a snapshot is taken, this method is called and
     the result is displayed on top of the four-image panel.
@@ -61,7 +90,7 @@ class ObjectClassifier():
 
             for classification in (f for f in self.labels if classes_seen[f] > 0):
                 for feature in matrix_count[classification].keys():
-                    matrix_prob[classification][feature] = matrix_count[classification][feature] / classes_seen[classification]
+                    matrix_prob[classification][feature] = 1.0 * matrix_count[classification][feature] / classes_seen[classification]
             self.learned_model = matrix_prob
 
     
