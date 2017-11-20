@@ -24,6 +24,7 @@ class ObjectClassifier():
         self.features[self.feature_sad_panda] = .13
         self.features[self.feature_sneezy_panda] = .3
         self.features[self.feature_blue_squirrel] = .019
+        self.features[self.feature_doc_panda] = .02
 
         self.learned_model = {label:{feature_func:0 for feature_func in self.features.keys()} for label in self.labels}
 
