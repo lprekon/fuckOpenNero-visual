@@ -217,7 +217,22 @@ class ObjectClassifier():
     the result is displayed on top of the four-image panel.
     """
     def classify(self, edge_pixels, orientations):
-        return random.choice(self.labels)
+        guess_weight = {}
+        for label in labels:
+            guess_weight[label] = 1
+            for feature_func in features.keys():
+                if(feature_func((edge_pixels, brightness)) > features[feature_func]):
+                    guess_weight[label] *= learned_model[label][feature_func]
+        best_guess = []
+        max_val = 0
+        for label in labels:
+            if guess_weight[label] > max_val:
+                max_val = guess_weight[label]
+                best_guess = [label,]
+            elif guess_weight[label] == max_val:
+                best_guess.append(label)
+        return random.choice(best_guess)
+
 
     """
     This is your training method. Feel free to change the
