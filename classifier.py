@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import re
 from PIL import Image
 from os import listdir
 from os.path import isfile, join
@@ -10,9 +11,10 @@ classify methods for this assignment.
 """
 class ObjectClassifier():
     labels = ['Tree', 'Sydney', 'Steve', 'Cube']
-    learned_model={}
     features = {}
 
+    def __init__(self):
+        self.learned_model = {label:{feature_func:0 for feature_func in self.features.keys()} for label in self.labels}
 
     # [0,315,45,270,90,225,180,135]
 
@@ -212,6 +214,8 @@ class ObjectClassifier():
 
     features[feature_blue_squirrel] = .019
 
+
+
     """
     Everytime a snapshot is taken, this method is called and
     the result is displayed on top of the four-image panel.
@@ -259,6 +263,24 @@ class ObjectClassifier():
                 for feature in matrix_count[classification].keys():
                     matrix_prob[classification][feature] = 1.0 * matrix_count[classification][feature] / classes_seen[classification]
             self.learned_model = matrix_prob
+
+    def serialize(self):
+        label_column_size = reduce(max, map(len, self.labels), 0)
+        feature_names = {feature_func:re.search("function (feature.*) at", str(feature_func)).group(1) for feature_func in self.features.keys()}
+        feature_column_size = reduce(max, map(len, feature_names.values()), 0) + 1
+        bits = ["".join((" " for i in range(feature_column_size + 1))),]
+        for label in self.labels:
+            bit = "".join(" " for i in range(label_column_size - len(label))) + label
+            bits.append(bit)
+        rows = [" ".join(bits),]
+        for feature_func in self.features:
+            row = feature_names[feature_func] + "".join(" " for i in range(feature_column_size - len(feature_names[feature_func]) + 1))
+            for label in self.labels:
+                data = str(self.learned_model[label][feature_func])
+                row += "".join(" " for i in range(label_column_size - len(data) + 1))
+                row += data
+            rows.append(row)
+        return "\n".join(rows)
 
 
 
