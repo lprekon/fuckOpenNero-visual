@@ -11,9 +11,7 @@ classify methods for this assignment.
 class ObjectClassifier():
     labels = ['Tree', 'Sydney', 'Steve', 'Cube']
     learned_model={}
-
-    def testFeature(image_data):
-        return True
+    features = {}
 
     """
     checks: pixels with brightness >= 100 and orientation == 90
@@ -34,13 +32,9 @@ class ObjectClassifier():
                     edge_count += 1
                     if orientation[y][x] == 90:
                         response_count += 1
-        print("Sad Panda:")
-        print("\tresponse: " + str(response_count))
-        print("\ttotal: " + str(edge_count))
-        print("\t%: " + str(100.0 * response_count / edge_count))
-        return 1.0 * response_count / edge_count >= .13
+        return 1.0 * response_count / edge_count
 
-
+    features[feature_sad_panda] = .13
     """
     checks: pixels with brightness >=100
     against: all
@@ -51,15 +45,9 @@ class ObjectClassifier():
         orientation = image_data[1]
         rows, columns = brightness.shape
         response = len([brightness[y][x] for y in range(rows) for x in range(columns) if brightness[y][x] >= 100])
-        print("Blue Squirell:")
-        print("\tresponse: " + str(response))
-        print("\ttotal: " + str(rows*columns))
-        print("\t%: " + str(100.0 * response / (rows * columns)))
-        return 1.0 * response / (rows * columns) > .04
 
+    features[feature_blue_squirrel] = .01
 
-
-    features = [feature_sad_panda, feature_blue_squirrel]   # Will be names of predicate functions
     """
     Everytime a snapshot is taken, this method is called and
     the result is displayed on top of the four-image panel.
@@ -82,10 +70,10 @@ class ObjectClassifier():
             images = [(data_folder + f) for f in listdir(data_folder) if isfile(join(data_folder, f))]
             for image in images:
                 image_data = load_image(image)  # <-- this takes ~ .75 seconds. Slows everything down
-                for feature in self.features:
+                for feature_func in self.features.keys():
                     # TODO check edge info against each feature
-                    if feature(image_data):
-                        matrix_count[classification][feature] += 1
+                    if feature_func(image_data) > self.features[feature_func]:
+                        matrix_count[classification][feature_func] += 1
                 classes_seen[classification] += 1
 
             for classification in (f for f in self.labels if classes_seen[f] > 0):
@@ -93,7 +81,7 @@ class ObjectClassifier():
                     matrix_prob[classification][feature] = 1.0 * matrix_count[classification][feature] / classes_seen[classification]
             self.learned_model = matrix_prob
 
-    
+
 
 """
 Loads an image from file and calculates the edge pixel orientations.
