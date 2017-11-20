@@ -1,9 +1,15 @@
 from classifier import *
+from os import listdir
 
 def main():
 	buddy = ObjectClassifier()
 	buddy.train()
 	print(buddy.learned_model)
+	print(buddy.serialize())
+	models = listdir("models")
+	f = open('./models/model_' + str(len(models)) + '.dat', 'w')
+	f.write(buddy.serialize())
+	f.close()
 
 if __name__ == '__main__':
 	main()
@@ -27,4 +33,3 @@ def find_average_feature():
 		median = data[len(data) // 2]
 		print("\tmean: " + str(mean))
 		print("\tmeadian: " + str(median))
-                    

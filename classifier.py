@@ -13,8 +13,20 @@ class ObjectClassifier():
 
     def __init__(self):
         self.labels = ['Tree', 'Sydney', 'Steve', 'Cube']
-        self.learned_model = {label:{feature_func:0 for feature_func in self.features.keys()} for label in self.labels}
         self.features = {}
+
+        self.features[self.feature_happy_panda] = .24
+        self.features[self.feature_grumpy_panda] = .5
+        self.features[self.feature_sleepy_panda] = .55
+        self.features[self.feature_dopey_panda] = .44
+        self.features[self.feature_sad_panda] = .13
+        self.features[self.feature_bashful_panda] = .04
+        self.features[self.feature_sad_panda] = .13
+        self.features[self.feature_sneezy_panda] = .3
+        self.features[self.feature_blue_squirrel] = .019
+
+        self.learned_model = {label:{feature_func:0 for feature_func in self.features.keys()} for label in self.labels}
+
 
     # [0,315,45,270,90,225,180,135]
 
@@ -22,7 +34,7 @@ class ObjectClassifier():
     checks: pixels with brightness >= 100 and orientation == 0
     against: pixels with brighness >= 100
     """
-    def feature_happy_panda(image_data):
+    def feature_happy_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -38,14 +50,14 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_happy_panda] = .24
+
 
     """
     checks: pixels with brightness >= 100 and orientation == 315
     against: pixels with brighness >= 100
     for: >20%
     """
-    def feature_grumpy_panda(image_data):
+    def feature_grumpy_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -61,14 +73,14 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_grumpy_panda] = .5
+
 
     """
     checks: pixels with brightness >= 100 and orientation == 45
     against: pixels with brighness >= 100
     for: >20%
     """
-    def feature_sleepy_panda(image_data):
+    def feature_sleepy_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -84,14 +96,14 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_sleepy_panda] = .55
+
 
     """
     checks: pixels with brightness >= 100 and orientation == 270
     against: pixels with brighness >= 100
     for: >20%
     """
-    def feature_dopey_panda(image_data):
+    def feature_dopey_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -107,14 +119,14 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_dopey_panda] = .44
+
 
 
     """
     checks: pixels with brightness >= 100 and orientation == 90
     against: pixels with brighness >= 100
     """
-    def feature_sad_panda(image_data):
+    def feature_sad_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -130,14 +142,14 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_sad_panda] = .13
+
 
     """
     checks: pixels with brightness >= 100 and orientation == 225
     against: pixels with brighness >= 100
     for: >20%
     """
-    def feature_bashful_panda(image_data):
+    def feature_bashful_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -153,14 +165,14 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_bashful_panda] = .04
+
 
     """
     checks: pixels with brightness >= 100 and orientation == 180
     against: pixels with brighness >= 100
     for: >20%
     """
-    def feature_doc_panda(image_data):
+    def feature_doc_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -176,14 +188,14 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_sad_panda] = .13
+
 
     """
     checks: pixels with brightness >= 100 and orientation == 135
     against: pixels with brighness >= 100
     for: >20%
     """
-    def feature_sneezy_panda(image_data):
+    def feature_sneezy_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
@@ -199,20 +211,20 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-        self.features[feature_sneezy_panda] = .3
+
 
     """
     checks: pixels with brightness >=100
     against: all
     """
-    def feature_blue_squirrel(image_data):
+    def feature_blue_squirrel(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
         response = len([brightness[y][x] for y in range(rows) for x in range(columns) if brightness[y][x] >= 100])
         return 1.0 * response / (rows * columns)
 
-        self.features[feature_blue_squirrel] = .019
+
 
 
 
