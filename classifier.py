@@ -36,7 +36,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_happy_panda] = .13
+    features[feature_happy_panda] = .24
 
     """
     checks: pixels with brightness >= 100 and orientation == 315
@@ -59,7 +59,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_grumpy_panda] = .13
+    features[feature_grumpy_panda] = .5
 
     """
     checks: pixels with brightness >= 100 and orientation == 45
@@ -82,7 +82,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_sleepy_panda] = .13
+    features[feature_sleepy_panda] = .55
 
     """
     checks: pixels with brightness >= 100 and orientation == 270
@@ -105,7 +105,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_dopey_panda] = .13
+    features[feature_dopey_panda] = .44
 
 
     """
@@ -151,7 +151,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_bashful_panda] = .13
+    features[feature_bashful_panda] = .04
 
     """
     checks: pixels with brightness >= 100 and orientation == 180
@@ -176,7 +176,7 @@ class ObjectClassifier():
 
     features[feature_sad_panda] = .13
 
-     """
+    """
     checks: pixels with brightness >= 100 and orientation == 135
     against: pixels with brighness >= 100
     for: >20%
@@ -197,7 +197,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_sneezy_panda] = .13
+    features[feature_sneezy_panda] = .3
 
     """
     checks: pixels with brightness >=100
