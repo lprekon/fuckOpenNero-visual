@@ -13,10 +13,104 @@ class ObjectClassifier():
     learned_model={}
     features = {}
 
+
+    # [0,315,45,270,90,225,180,135]
+
+    """
+    checks: pixels with brightness >= 100 and orientation == 0
+    against: pixels with brighness >= 100
+    """
+    def feature_happy_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 0:
+                        response_count += 1
+        return 1.0 * response_count / edge_count
+
+    features[feature_happy_panda] = .13
+
+    """
+    checks: pixels with brightness >= 100 and orientation == 315
+    against: pixels with brighness >= 100
+    for: >20%
+    """
+    def feature_grumpy_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 315:
+                        response_count += 1
+        return 1.0 * response_count / edge_count
+
+    features[feature_grumpy_panda] = .13
+
+    """
+    checks: pixels with brightness >= 100 and orientation == 45
+    against: pixels with brighness >= 100
+    for: >20%
+    """
+    def feature_sleepy_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 45:
+                        response_count += 1
+        return 1.0 * response_count / edge_count
+
+    features[feature_sleepy_panda] = .13
+
+    """
+    checks: pixels with brightness >= 100 and orientation == 270
+    against: pixels with brighness >= 100
+    for: >20%
+    """
+    def feature_dopey_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 270:
+                        response_count += 1
+        return 1.0 * response_count / edge_count
+
+    features[feature_dopey_panda] = .13
+
+
     """
     checks: pixels with brightness >= 100 and orientation == 90
     against: pixels with brighness >= 100
-    for: >20%
     """
     def feature_sad_panda(image_data):
         brightness = image_data[0]
@@ -35,10 +129,79 @@ class ObjectClassifier():
         return 1.0 * response_count / edge_count
 
     features[feature_sad_panda] = .13
+
+    """
+    checks: pixels with brightness >= 100 and orientation == 225
+    against: pixels with brighness >= 100
+    for: >20%
+    """
+    def feature_bashful_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 225:
+                        response_count += 1
+        return 1.0 * response_count / edge_count
+
+    features[feature_bashful_panda] = .13
+
+    """
+    checks: pixels with brightness >= 100 and orientation == 180
+    against: pixels with brighness >= 100
+    for: >20%
+    """
+    def feature_doc_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 180:
+                        response_count += 1
+        return 1.0 * response_count / edge_count
+
+    features[feature_sad_panda] = .13
+
+     """
+    checks: pixels with brightness >= 100 and orientation == 135
+    against: pixels with brighness >= 100
+    for: >20%
+    """
+    def feature_sneezy_panda(image_data):
+        brightness = image_data[0]
+        orientation = image_data[1]
+        rows, columns = brightness.shape
+        # Python: If you can't do it in one line, don't do it at all.
+        # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+        edge_count=0
+        response_count=0
+        for y in range(rows):
+            for x in range(columns):
+                if brightness[y][x] >= 100:
+                    edge_count += 1
+                    if orientation[y][x] == 135:
+                        response_count += 1
+        return 1.0 * response_count / edge_count
+
+    features[feature_sneezy_panda] = .13
+
     """
     checks: pixels with brightness >=100
     against: all
-    for: >10%
     """
     def feature_blue_squirrel(image_data):
         brightness = image_data[0]
