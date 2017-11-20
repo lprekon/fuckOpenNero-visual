@@ -45,8 +45,9 @@ class ObjectClassifier():
         orientation = image_data[1]
         rows, columns = brightness.shape
         response = len([brightness[y][x] for y in range(rows) for x in range(columns) if brightness[y][x] >= 100])
+        return 1.0 * response / (rows * columns)
 
-    features[feature_blue_squirrel] = .01
+    features[feature_blue_squirrel] = .019
 
     """
     Everytime a snapshot is taken, this method is called and
