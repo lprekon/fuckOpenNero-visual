@@ -284,7 +284,7 @@ class ObjectClassifier():
 
     def serialize(self):
         label_column_size = reduce(max, map(len, self.labels), 0)
-        feature_names = {feature_func:re.search("function (feature.*) at", str(feature_func)).group(1) for feature_func in self.features.keys()}
+        feature_names = {feature_func:re.search("ObjectClassifier\.(feature.*) of", str(feature_func)).group(1) for feature_func in self.features.keys()}
         feature_column_size = reduce(max, map(len, feature_names.values()), 0) + 1
         bits = ["".join((" " for i in range(feature_column_size + 1))),]
         for label in self.labels:
