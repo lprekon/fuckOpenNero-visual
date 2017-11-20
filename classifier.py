@@ -9,10 +9,11 @@ This is your object classifier. You should implement the train and
 classify methods for this assignment.
 """
 class ObjectClassifier():
-    labels = ['Tree', 'Sydney', 'Steve', 'Cube']
-    learned_model={}
-    features = {}
 
+    def __init__(self):
+        self.labels = ['Tree', 'Sydney', 'Steve', 'Cube']
+        self.learned_model={}
+        self.features = {}
 
     # [0,315,45,270,90,225,180,135]
 
@@ -36,7 +37,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_happy_panda] = .24
+        self.features[feature_happy_panda] = .24
 
     """
     checks: pixels with brightness >= 100 and orientation == 315
@@ -59,7 +60,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_grumpy_panda] = .5
+        self.features[feature_grumpy_panda] = .5
 
     """
     checks: pixels with brightness >= 100 and orientation == 45
@@ -82,7 +83,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_sleepy_panda] = .55
+        self.features[feature_sleepy_panda] = .55
 
     """
     checks: pixels with brightness >= 100 and orientation == 270
@@ -105,7 +106,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_dopey_panda] = .44
+        self.features[feature_dopey_panda] = .44
 
 
     """
@@ -128,7 +129,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_sad_panda] = .13
+        self.features[feature_sad_panda] = .13
 
     """
     checks: pixels with brightness >= 100 and orientation == 225
@@ -151,7 +152,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_bashful_panda] = .04
+        self.features[feature_bashful_panda] = .04
 
     """
     checks: pixels with brightness >= 100 and orientation == 180
@@ -174,7 +175,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_sad_panda] = .13
+        self.features[feature_sad_panda] = .13
 
     """
     checks: pixels with brightness >= 100 and orientation == 135
@@ -197,7 +198,7 @@ class ObjectClassifier():
                         response_count += 1
         return 1.0 * response_count / edge_count
 
-    features[feature_sneezy_panda] = .3
+        self.features[feature_sneezy_panda] = .3
 
     """
     checks: pixels with brightness >=100
@@ -210,7 +211,7 @@ class ObjectClassifier():
         response = len([brightness[y][x] for y in range(rows) for x in range(columns) if brightness[y][x] >= 100])
         return 1.0 * response / (rows * columns)
 
-    features[feature_blue_squirrel] = .019
+        self.features[feature_blue_squirrel] = .019
 
     """
     Everytime a snapshot is taken, this method is called and
@@ -218,14 +219,14 @@ class ObjectClassifier():
     """
     def classify(self, edge_pixels, orientations):
         guess_weight = {}
-        for label in labels:
+        for label in self.labels:
             guess_weight[label] = 1
-            for feature_func in features.keys():
-                if(feature_func((edge_pixels, brightness)) > features[feature_func]):
-                    guess_weight[label] *= learned_model[label][feature_func]
+            for feature_func in self.features.keys():
+                if(feature_func((edge_pixels, brightness)) > self.features[feature_func]):
+                    guess_weight[label] *= self.learned_model[label][feature_func]
         best_guess = []
         max_val = 0
-        for label in labels:
+        for label in self.labels:
             if guess_weight[label] > max_val:
                 max_val = guess_weight[label]
                 best_guess = [label,]
@@ -244,13 +245,19 @@ class ObjectClassifier():
         matrix_prob = {label : {feature : 0 for feature in self.features} for label in self.labels}    # dict of dicts representing P(f|C)
         matrix_count = {label : {feature : 0 for feature in self.features} for label in self.labels}   # dict of dicts representing # times feature seen per class
         classes_seen = {label : 0 for label in self.labels}   # dict representing times each class encountered
+        print "Training"
         for classification in self.labels:
+            print "--" + classification
             data_folder = "./snapshots/training_data/" + classification + "/"
             images = [(data_folder + f) for f in listdir(data_folder) if isfile(join(data_folder, f))]
+            i = 0
             for image in images:
+                print ("Starting: " + str(i))
+                i += 1
                 image_data = load_image(image)  # <-- this takes ~ .75 seconds. Slows everything down
                 for feature_func in self.features.keys():
                     # TODO check edge info against each feature
+                    print("Feature: " + str(feature_func))
                     if feature_func(image_data) > self.features[feature_func]:
                         matrix_count[classification][feature_func] += 1
                 classes_seen[classification] += 1
