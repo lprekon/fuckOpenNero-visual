@@ -19,15 +19,15 @@ class ObjectClassifier():
 
         # All feature functions must be here to be properly loaded from pickl dict
         self.features[self.feature_happy_panda] = 0
-        self.features[self.feature_grumpy_panda] = 0
-        self.features[self.feature_sleepy_panda] = 0
+        # self.features[self.feature_grumpy_panda] = 0
+        # self.features[self.feature_sleepy_panda] = 0
         self.features[self.feature_dopey_panda] = 0
-        self.features[self.feature_sad_panda] = 0
-        self.features[self.feature_bashful_panda] = 0
-        self.features[self.feature_sneezy_panda] = 0
-        self.features[self.feature_blue_squirrel] = 0
+        # self.features[self.feature_sad_panda] = 0
+        # self.features[self.feature_bashful_panda] = 0
+        # self.features[self.feature_sneezy_panda] = 0
+        # self.features[self.feature_blue_squirrel] = 0
         self.features[self.feature_doc_panda] = 0
-        self.features[self.feature_flying_squirrel] = 0
+        # self.features[self.feature_flying_squirrel] = 0
         self.features[self.feature_bad_romance] = 0
         if len(listdir("features")) > 0:
             self.features = self.load_features()
@@ -386,6 +386,9 @@ class ObjectClassifier():
             if(feature_func((edge_pixels, orientations)) > self.features[feature_func]):
                 for label in self.labels:
                     guess_weight[label] *= self.learned_model[label][feature_func.__name__]
+            else:
+                for label in self.labels:
+                    guess_weight[label] *= 1 - self.learned_model[label][feature_func.__name__]
         # for label in self.labels:
         #     guess_weight[label] = 1
         #     for feature_func in self.features.keys():
