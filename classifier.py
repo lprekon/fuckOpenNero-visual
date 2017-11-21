@@ -19,16 +19,19 @@ class ObjectClassifier():
 
         # All feature functions must be here to be properly loaded from pickl dict
         self.features[self.feature_happy_panda] = 0
-        self.features[self.feature_grumpy_panda] = 0
-        self.features[self.feature_sleepy_panda] = 0
-        self.features[self.feature_dopey_panda] = 0
-        self.features[self.feature_sad_panda] = 0
-        self.features[self.feature_bashful_panda] = 0
-        self.features[self.feature_sneezy_panda] = 0
-        self.features[self.feature_blue_squirrel] = 0
+        # self.features[self.feature_grumpy_panda] = 0
+        # self.features[self.feature_sleepy_panda] = 0
+        self.features[self.feature_dopey_panda] = 0 # low on tree high on cube
+        # self.features[self.feature_sad_panda] = 0
+        # self.features[self.feature_bashful_panda] = 0
+        # self.features[self.feature_sneezy_panda] = 0
+        # self.features[self.feature_blue_squirrel] = 0
         self.features[self.feature_doc_panda] = 0
         self.features[self.feature_flying_squirrel] = 0
         self.features[self.feature_bad_romance] = 0
+        self.features[self.feature_ground_squirrel] = 0
+        # self.features[self.feature_ice_cube] = 0
+
         if len(listdir("features")) > 0:
             self.features = self.load_features()
 
@@ -43,7 +46,13 @@ class ObjectClassifier():
         feature_names = {}
         with open("features/f.pkl", "rb") as f:
             feature_names = pickle.load(f)
-        return {feature_func:feature_names[feature_func.__name__] for feature_func in self.features.keys()}
+        res = {}
+        for feature_func in self.features.keys():
+            if feature_func.__name__ in feature_names:
+                res[feature_func] = feature_names[feature_func.__name__]
+            else:
+                res[feature_func] = 0
+        return res
 
 
     def feature_to_name(self, feature):
@@ -355,6 +364,23 @@ class ObjectClassifier():
         return 1.0 * np.sum(o) / (r * c)
 
     """
+    checks: pixels with brightness between 100 and 200
+    against: all
+    """
+    def feature_ground_squirrel(self, image_data):
+        brightness, orientation = image_data
+        r, c = orientation.shape
+
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        res = np.sum(np.where(
+            ((brightness >= 200)) &
+            ((orientation == 0) | (orientation == 180) | (orientation == 90) | (orientation == 270)),
+             ones,
+              z))
+        return 1.0 * res / (r*c)
+
+    """
     checks: number of diagnols
     against: bottom half
     """
@@ -368,8 +394,13 @@ class ObjectClassifier():
         diags = np.where( ((orientation == 315) | (orientation == 45) | (orientation == 135) | (orientation == 225)) & (brightness >= 100), bot_half, np.zeros(brightness.shape))
         res = np.sum(diags)
         return 1.0 * res / (r*c)
-    #
-    # def feature_john_doe(self, image_date):
+
+    def feature_ice_cube(self, image_data):
+        brightness, orientation = image_data
+        r, c = orientation.shape
+
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
 
 
 
