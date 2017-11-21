@@ -19,7 +19,7 @@ def find_average_feature():
 				values[feature_func.__name__].append(feature_func(image_data))
 	for feature in buddy.features.keys():
 		print(feature.__name__)
-		data = values[feature.__name__]
+		data = sorted(values[feature.__name__])
 		median = data[len(data) // 2]
 		print("\tmeadian: " + str(median))
 		features[feature.__name__] = median
