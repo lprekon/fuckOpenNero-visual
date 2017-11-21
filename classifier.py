@@ -4,6 +4,7 @@ import re
 from PIL import Image
 from os import listdir
 from os.path import isfile, join
+import pickle
 
 """
 This is your object classifier. You should implement the train and
@@ -24,11 +25,30 @@ class ObjectClassifier():
         self.features[self.feature_sad_panda] = .13
         self.features[self.feature_sneezy_panda] = .3
         self.features[self.feature_blue_squirrel] = .019
+        self.features[self.feature_flying_squirrel] = 0.19
 
-        self.learned_model = {label:{feature_func:0 for feature_func in self.features.keys()} for label in self.labels}
+        self.learned_model = {}
 
+        if len(listdir("models")) > 0:
+            self.learned_model = self.load_model(sorted(listdir("models"))[-1][:-4])
+        else:
+            self.learned_model = {label:{self.feature_to_name(feature_func):0 for feature_func in self.features.keys()} for label in self.labels}
 
     # [0,315,45,270,90,225,180,135]
+
+    def feature_to_name(self, feature):
+        mapping = {}
+        for feature in self.features:
+            mapping[feature] = feature.__name__
+        return mapping[feature]
+
+
+    def name_to_feature(self, name):
+        mapping = {}
+        for feature in self.features:
+            mapping[feature.__name__] = feature
+        return mapping[name]
+
 
     """
     checks: pixels with brightness >= 100 and orientation == 0
@@ -40,14 +60,24 @@ class ObjectClassifier():
         rows, columns = brightness.shape
         # Python: If you can't do it in one line, don't do it at all.
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
-        edge_count=0
-        response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 0:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 0, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # edge_count=0
+        # response_count=0
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 0:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -63,14 +93,24 @@ class ObjectClassifier():
         rows, columns = brightness.shape
         # Python: If you can't do it in one line, don't do it at all.
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
-        edge_count=0
-        response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 315:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 315, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # edge_count=0
+        # response_count=0
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 315:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -88,12 +128,22 @@ class ObjectClassifier():
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
         edge_count=0
         response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 45:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 45, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 45:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -111,12 +161,22 @@ class ObjectClassifier():
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
         edge_count=0
         response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 270:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 270, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 270:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -134,12 +194,22 @@ class ObjectClassifier():
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
         edge_count=0
         response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 90:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 90, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 90:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -155,14 +225,25 @@ class ObjectClassifier():
         rows, columns = brightness.shape
         # Python: If you can't do it in one line, don't do it at all.
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
+
         edge_count=0
         response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 225:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 225, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 225:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -180,12 +261,22 @@ class ObjectClassifier():
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
         edge_count=0
         response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 180:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 180, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 180:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -198,17 +289,26 @@ class ObjectClassifier():
     def feature_sneezy_panda(self, image_data):
         brightness = image_data[0]
         orientation = image_data[1]
-        rows, columns = brightness.shape
         # Python: If you can't do it in one line, don't do it at all.
         # This is basically a DIY map-reduce, but using actual map-reduce would have been a bigger pain.
         edge_count=0
         response_count=0
-        for y in range(rows):
-            for x in range(columns):
-                if brightness[y][x] >= 100:
-                    edge_count += 1
-                    if orientation[y][x] == 135:
-                        response_count += 1
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        o = np.where(orientation == 135, ones, z)
+        # print(o)
+        both = np.logical_and(b == 1,o == 1)
+        # print(both)
+        edge_count = np.sum(b)
+        response_count = np.sum(both)
+        # for y in range(rows):
+        #     for x in range(columns):
+        #         if brightness[y][x] >= 100:
+        #             edge_count += 1
+        #             if orientation[y][x] == 135:
+        #                 response_count += 1
         return 1.0 * response_count / edge_count
 
 
@@ -221,10 +321,28 @@ class ObjectClassifier():
         brightness = image_data[0]
         orientation = image_data[1]
         rows, columns = brightness.shape
-        response = len([brightness[y][x] for y in range(rows) for x in range(columns) if brightness[y][x] >= 100])
+
+        z = np.zeros(brightness.shape)
+        ones = np.ones(brightness.shape)
+        b = np.where(brightness >= 100, ones, z)
+        # print(b)
+        response = np.sum(b)
+        # response = len([brightness[y][x] for y in range(rows) for x in range(columns) if brightness[y][x] >= 100])
         return 1.0 * response / (rows * columns)
 
+    """
+    checks: pixels with orientation = 0
+    against: bottom half
+    """
+    def feature_flying_squirrel(self, image_data):
+        orientation = image_data[1]
+        r, c = orientation.shape
 
+        z = np.zeros((r//2, c))
+        ones = np.ones((r - r//2, c))
+        bot_half = np.concatenate((z, ones), axis=0)
+        o = np.where(orientation == 0, bot_half, np.zeros(orientation.shape))
+        return 1.0 * np.sum(o) / (r * c)
 
 
 
@@ -236,18 +354,35 @@ class ObjectClassifier():
         guess_weight = {}
         for label in self.labels:
             guess_weight[label] = 1
-            for feature_func in self.features.keys():
-                if(feature_func((edge_pixels, brightness)) > self.features[feature_func]):
-                    guess_weight[label] *= self.learned_model[label][feature_func]
+
+        for feature_func in self.features.keys():
+            if(feature_func((edge_pixels, orientations)) > self.features[feature_func]):
+                for label in self.labels:
+                    guess_weight[label] *= self.learned_model[label][feature_func.__name__]
+        # for label in self.labels:
+        #     guess_weight[label] = 1
+        #     for feature_func in self.features.keys():
+        #         if(feature_func((edge_pixels, orientations)) > self.features[feature_func]):
+        #             guess_weight[label] *= self.learned_model[label][feature_func.__name__]
         best_guess = []
         max_val = 0
         for label in self.labels:
             if guess_weight[label] > max_val:
                 max_val = guess_weight[label]
-                best_guess = [label,]
+                best_guess = [label]
             elif guess_weight[label] == max_val:
                 best_guess.append(label)
+        # print (best_guess)
         return random.choice(best_guess)
+
+
+    def apply_feature(self, feature_func, matrix_count, classification, image_data):
+        print("Feature: " + feature_func.__name__)
+        res = feature_func(image_data)
+        thread_lock.acquire(1)
+        if  res > self.features[feature_func]:
+            matrix_count[classification][feature_func.__name__] += 1
+        thread_lock.release()
 
 
     """
@@ -257,8 +392,8 @@ class ObjectClassifier():
     reading in each image from your datasets.
     """
     def train(self):
-        matrix_prob = {label : {feature : 0 for feature in self.features} for label in self.labels}    # dict of dicts representing P(f|C)
-        matrix_count = {label : {feature : 0 for feature in self.features} for label in self.labels}   # dict of dicts representing # times feature seen per class
+        matrix_prob = {label : {feature.__name__ : 0 for feature in self.features} for label in self.labels}    # dict of dicts representing P(f|C)
+        matrix_count = {label : {feature.__name__ : 0 for feature in self.features} for label in self.labels}   # dict of dicts representing # times feature seen per class
         classes_seen = {label : 0 for label in self.labels}   # dict representing times each class encountered
         print "Training"
         for classification in self.labels:
@@ -270,11 +405,12 @@ class ObjectClassifier():
                 print ("Starting: " + str(i))
                 i += 1
                 image_data = load_image(image)  # <-- this takes ~ .75 seconds. Slows everything down
+
                 for feature_func in self.features.keys():
                     # TODO check edge info against each feature
-                    print("Feature: " + str(feature_func))
                     if feature_func(image_data) > self.features[feature_func]:
-                        matrix_count[classification][feature_func] += 1
+                        matrix_count[classification][feature_func.__name__] += 1
+
                 classes_seen[classification] += 1
 
             for classification in (f for f in self.labels if classes_seen[f] > 0):
@@ -284,7 +420,7 @@ class ObjectClassifier():
 
     def serialize(self):
         label_column_size = reduce(max, map(len, self.labels), 0)
-        feature_names = {feature_func:re.search("function (feature.*) at", str(feature_func)).group(1) for feature_func in self.features.keys()}
+        feature_names = {feature_func: feature_func.__name__ for feature_func in self.features.keys()}
         feature_column_size = reduce(max, map(len, feature_names.values()), 0) + 1
         bits = ["".join((" " for i in range(feature_column_size + 1))),]
         for label in self.labels:
@@ -294,11 +430,20 @@ class ObjectClassifier():
         for feature_func in self.features:
             row = feature_names[feature_func] + "".join(" " for i in range(feature_column_size - len(feature_names[feature_func]) + 1))
             for label in self.labels:
-                data = str(self.learned_model[label][feature_func])
+                data = str(self.learned_model[label][feature_names[feature_func]])
                 row += "".join(" " for i in range(label_column_size - len(data) + 1))
                 row += data
             rows.append(row)
         return "\n".join(rows)
+
+    def save_model(self, name ):
+        with open('models/'+ name + '.pkl', 'wb') as f:
+            pickle.dump(self.learned_model, f, pickle.HIGHEST_PROTOCOL)
+
+    def load_model(self, name):
+        print("loading model " + name)
+        with open('models/' + name + '.pkl', 'rb') as f:
+            return pickle.load(f)
 
 
 
