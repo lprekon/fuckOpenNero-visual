@@ -27,7 +27,7 @@ class ObjectClassifier():
         # self.features[self.feature_sneezy_panda] = 0
         # self.features[self.feature_blue_squirrel] = 0
         self.features[self.feature_doc_panda] = 0
-        self.features[self.feature_flying_squirrel] = 0
+        # self.features[self.feature_flying_squirrel] = 0
         self.features[self.feature_bad_romance] = 0
         self.features[self.feature_ground_squirrel] = 0
         # self.features[self.feature_ice_cube] = 0
@@ -417,6 +417,9 @@ class ObjectClassifier():
             if(feature_func((edge_pixels, orientations)) > self.features[feature_func]):
                 for label in self.labels:
                     guess_weight[label] *= self.learned_model[label][feature_func.__name__]
+            else:
+                for label in self.labels:
+                    guess_weight[label] *= 1 - self.learned_model[label][feature_func.__name__]
         # for label in self.labels:
         #     guess_weight[label] = 1
         #     for feature_func in self.features.keys():
