@@ -1,9 +1,11 @@
 from classifier import *
 from os import listdir
+import pickle
 
 def find_average_feature():
 	buddy = ObjectClassifier()
 	values = {}
+	features={}
 	for f in buddy.features.keys():
 		values[f.__name__] = []
 	for classification in buddy.labels:
@@ -20,6 +22,11 @@ def find_average_feature():
 		median = data[len(data) // 2]
 		print("\tmean: " + str(mean))
 		print("\tmeadian: " + str(median))
+		features[feature.__name__] = max(mean, median)
+	print("\ndumping features to ./feature/f.pkl\n")
+	with open('features/f.pkl', 'wb') as f:
+            pickle.dump(features, f, pickle.HIGHEST_PROTOCOL)
+
 
 def main():
 	buddy = ObjectClassifier()
