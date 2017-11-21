@@ -22,7 +22,6 @@ class ObjectClassifier():
         self.features[self.feature_dopey_panda] = .44
         self.features[self.feature_sad_panda] = .13
         self.features[self.feature_bashful_panda] = .04
-        self.features[self.feature_sad_panda] = .13
         self.features[self.feature_sneezy_panda] = .3
         self.features[self.feature_blue_squirrel] = .019
         self.features[self.feature_doc_panda] = .02
