@@ -16,15 +16,15 @@ class ObjectClassifier():
         self.labels = ['Tree', 'Sydney', 'Steve', 'Cube']
         self.features = {}
 
-        self.features[self.feature_happy_panda] = .24
-        self.features[self.feature_grumpy_panda] = .5
-        self.features[self.feature_sleepy_panda] = .55
+        self.features[self.feature_happy_panda] = .25
+        self.features[self.feature_grumpy_panda] = .051
+        self.features[self.feature_sleepy_panda] = .058
         self.features[self.feature_dopey_panda] = .44
-        self.features[self.feature_sad_panda] = .13
-        self.features[self.feature_bashful_panda] = .04
+        self.features[self.feature_sad_panda] = .14
+        self.features[self.feature_bashful_panda] = .041
         self.features[self.feature_sneezy_panda] = .3
-        self.features[self.feature_blue_squirrel] = .019
-        self.features[self.feature_doc_panda] = .02
+        self.features[self.feature_blue_squirrel] = .018
+        self.features[self.feature_doc_panda] = .094
         self.features[self.feature_flying_squirrel] = 0.19
 
         self.learned_model = {}
