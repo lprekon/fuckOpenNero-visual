@@ -2,28 +2,30 @@ from classifier import *
 from os import listdir
 import pickle
 
-def find_average_feature():
-	buddy = ObjectClassifier()
-	values = {}
-	features={}
-	for f in buddy.features.keys():
-		values[f.__name__] = []
-	for classification in buddy.labels:
-		data_folder = "./snapshots/training_data/" + classification + "/"
-		images = [(data_folder + f) for f in listdir(data_folder) if isfile(join(data_folder, f))]
-		for image in images:
-			image_data = load_image(image)  # <-- this takes ~ .75 seconds. Slows everything down
-			for feature_func in buddy.features.keys():
-				values[feature_func.__name__].append(feature_func(image_data))
-	for feature in buddy.features.keys():
-		print(feature.__name__)
-		data = values[feature.__name__]
-		median = data[len(data) // 2]
-		print("\tmeadian: " + str(median))
-		features[feature.__name__] = median
-	print("\ndumping features to ./feature/f.pkl\n")
-	with open('features/f.pkl', 'wb') as f:
-            pickle.dump(features, f, pickle.HIGHEST_PROTOCOL)
+def find_average_feature(feature_model = None):
+	if not feature_model:
+		buddy = ObjectClassifier()
+		values = {}
+		features={}
+		for f in buddy.features.keys():
+			values[f.__name__] = []
+		for classification in buddy.labels:
+			data_folder = "./snapshots/training_data/" + classification + "/"
+			images = [(data_folder + f) for f in listdir(data_folder) if isfile(join(data_folder, f))]
+			for image in images:
+				image_data = load_image(image)  # <-- this takes ~ .75 seconds. Slows everything down
+				for feature_func in buddy.features.keys():
+					values[feature_func.__name__].append(feature_func(image_data))
+		for feature in buddy.features.keys():
+			print(feature.__name__)
+			data = values[feature.__name__]
+			median = data[len(data) // 2]
+			print("\tmeadian: " + str(median))
+			features[feature.__name__] = median
+		print("\ndumping features to ./feature/f.pkl\n")
+		with open('features/f.pkl', 'wb') as f:
+	            pickle.dump(features, f, pickle.HIGHEST_PROTOCOL)
+	else 
 
 
 def main():
