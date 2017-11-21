@@ -16,16 +16,17 @@ class ObjectClassifier():
         self.labels = ['Tree', 'Sydney', 'Steve', 'Cube']
         self.features = {}
 
-        self.features[self.feature_happy_panda] = .25
-        self.features[self.feature_grumpy_panda] = .051
-        self.features[self.feature_sleepy_panda] = .058
-        self.features[self.feature_dopey_panda] = .44
-        self.features[self.feature_sad_panda] = .14
-        self.features[self.feature_bashful_panda] = .041
-        self.features[self.feature_sneezy_panda] = .3
-        self.features[self.feature_blue_squirrel] = .018
-        self.features[self.feature_doc_panda] = .094
-        self.features[self.feature_flying_squirrel] = 0.19
+        self.features[self.feature_happy_panda] = 0.247719549276
+        # self.features[self.feature_grumpy_panda] = .051
+        # self.features[self.feature_sleepy_panda] = 0.0368449293507
+        # self.features[self.feature_dopey_panda] = 0.441960293329
+        # self.features[self.feature_sad_panda] = .14
+        # self.features[self.feature_bashful_panda] = 0.022893936684
+        # self.features[self.feature_sneezy_panda] = .3
+        # self.features[self.feature_blue_squirrel] = 0.0116479166667
+        self.features[self.feature_doc_panda] = 0.0894294401717
+        self.features[self.feature_flying_squirrel] = 0.193189583333
+        self.features[self.feature_bad_romance] = 0.000195833333333
 
         self.learned_model = {}
 
@@ -344,6 +345,23 @@ class ObjectClassifier():
         o = np.where(orientation == 0, bot_half, np.zeros(orientation.shape))
         return 1.0 * np.sum(o) / (r * c)
 
+    """
+    checks: number of diagnols
+    against: bottom half
+    """
+    def feature_bad_romance(self, image_data):
+        brightness, orientation = image_data
+        r, c = orientation.shape
+        z = np.zeros((r//2, c))
+        ones = np.ones((r - r//2, c))
+        bot_half = np.concatenate((z, ones), axis=0)
+
+        diags = np.where( ((orientation == 315) | (orientation == 45) | (orientation == 135) | (orientation == 225)) & (brightness >= 100), bot_half, np.zeros(brightness.shape))
+        res = np.sum(diags)
+        return 1.0 * res / (r*c)
+    #
+    # def feature_john_doe(self, image_date):
+
 
 
     """
@@ -353,7 +371,7 @@ class ObjectClassifier():
     def classify(self, edge_pixels, orientations):
         guess_weight = {}
         for label in self.labels:
-            guess_weight[label] = 1
+            guess_weight[label] = 0.25
 
         for feature_func in self.features.keys():
             if(feature_func((edge_pixels, orientations)) > self.features[feature_func]):

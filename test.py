@@ -14,7 +14,7 @@ def test():
 		print ("\nTesting " + classification)
 		right[classification] = 0
 		wrong[classification] = 0
-		data_folder = "./snapshots/training_data/" + classification + "/"
+		data_folder = "./snapshots/test_data/" + classification + "/"
 		images = [(data_folder + f) for f in listdir(data_folder) if isfile(join(data_folder, f))]
 		for image in images:
 			image_data = load_image(image)  # <-- this takes ~ .75 seconds. Slows everything down
