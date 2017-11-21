@@ -14,28 +14,37 @@ class ObjectClassifier():
 
     def __init__(self):
         self.labels = ['Tree', 'Sydney', 'Steve', 'Cube']
+
         self.features = {}
 
-        self.features[self.feature_happy_panda] = 0.247719549276
-        # self.features[self.feature_grumpy_panda] = .051
-        # self.features[self.feature_sleepy_panda] = 0.0368449293507
-        # self.features[self.feature_dopey_panda] = 0.441960293329
-        # self.features[self.feature_sad_panda] = .14
-        # self.features[self.feature_bashful_panda] = 0.022893936684
-        # self.features[self.feature_sneezy_panda] = .3
-        # self.features[self.feature_blue_squirrel] = 0.0116479166667
-        self.features[self.feature_doc_panda] = 0.0894294401717
-        self.features[self.feature_flying_squirrel] = 0.193189583333
-        self.features[self.feature_bad_romance] = 0.000195833333333
+        # All feature functions must be here to be properly loaded from pickl dict
+        self.features[self.feature_happy_panda] = 0
+        self.features[self.feature_grumpy_panda] = 0
+        self.features[self.feature_sleepy_panda] = 0
+        self.features[self.feature_dopey_panda] = 0
+        self.features[self.feature_sad_panda] = 0
+        self.features[self.feature_bashful_panda] = 0
+        self.features[self.feature_sneezy_panda] = 0
+        self.features[self.feature_blue_squirrel] = 0
+        self.features[self.feature_doc_panda] = 0
+        self.features[self.feature_flying_squirrel] = 0
+        self.features[self.feature_bad_romance] = 0
+        if len(listdir("features")) > 0:
+            self.features = self.load_features()
+
 
         self.learned_model = {}
-
         if len(listdir("models")) > 0:
             self.learned_model = self.load_model(sorted(listdir("models"))[-1][:-4])
         else:
             self.learned_model = {label:{self.feature_to_name(feature_func):0 for feature_func in self.features.keys()} for label in self.labels}
 
-    # [0,315,45,270,90,225,180,135]
+    def load_features(self):
+        feature_names = {}
+        with open("features/f.pkl", "rb") as f:
+            feature_names = pickle.load(f)
+        return {feature_func:feature_names[feature_func.__name__] for feature_func in self.features.keys()}
+
 
     def feature_to_name(self, feature):
         mapping = {}
@@ -44,7 +53,7 @@ class ObjectClassifier():
         return mapping[feature]
 
 
-    def name_to_feature(self, name):
+    def _name_to_feature(self, name):
         mapping = {}
         for feature in self.features:
             mapping[feature.__name__] = feature
