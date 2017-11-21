@@ -18,11 +18,9 @@ def find_average_feature():
 	for feature in buddy.features.keys():
 		print(feature.__name__)
 		data = values[feature.__name__]
-		mean = sum(data) / len(data)
 		median = data[len(data) // 2]
-		print("\tmean: " + str(mean))
 		print("\tmeadian: " + str(median))
-		features[feature.__name__] = max(mean, median)
+		features[feature.__name__] = median
 	print("\ndumping features to ./feature/f.pkl\n")
 	with open('features/f.pkl', 'wb') as f:
             pickle.dump(features, f, pickle.HIGHEST_PROTOCOL)
